@@ -3,55 +3,68 @@
 #include <limits.h>
 #include <stdbool.h>
 
-int split( char left[], char right[] );
+
 
 int main(int argc, char *argv[])
 {
-    int intarray[10] = {1,2,3,4,5,6,7,8,9,10};
-    int *pointer;
-    pointer = intarray;
-
-    printf("%d\n", intarray[10]);
-
-    printf("%d\n", pointer[0]);
-    pointer++;
-    printf("%d\n", pointer[1]);
-
-    intarray++;
-}
+ 
+    char *pointer;
+  
 
 
-int split( char left[], char right[] )
-{
-	int mode = 0;
-	int j = 0;
-	int length = strlen(left);
+    char string [5];
 
-	for (int i = 0; i < length; ++i)
-	{
-		if (mode == 0)
+    pointer = string;
+
+    printf("%s\n", string);
+
+    printf("strlen: %d\n", strlen(string));
+
+   for (int i = 0; i <= 4; ++i)
+   {
+   		
+   		printf("\ncharacter%d:%d\n", i, string[i]);
+
+   		char a = 'a';
+		int mask = 0x80; /* 10000000 */
+		while (mask>0) 
 		{
-		 	if (left[i] == ';')
-			{
-				mode = 1;
-				left[i] = '\0';
-				continue;
-			}
-		} 
-
-		if (mode == 1)
-		{
-			right[j] = left[i];
-
-			//if ( (left[i] == '\n') || (left[i] == ';') )
-			if ( (left[i] == ';') )
-			{
-				right[j] = '\0';
-			}
-			
-			j++;
+		    printf("%d", (string[i] & mask) > 0 );
+		    mask >>= 1; /* move the bit down */
 		}
 
+   }
+
+
+
+	printf("\n");
+
+	char word[10] = "123456789";
+	char *wordpointer;
+
+	wordpointer = word;
+
+	for (int i = 0; i < strlen(word); ++i)
+	{
+		printf("%s\n", wordpointer);
+		wordpointer++;
 	}
-	
+
+	printf("%d\n", sizeof(int*) );
+
+	int a = 12;
+
+	int *b = &a;
+	a++;
+
+	printf("%d\n", *b);
+
+	int longint = 4399L;
+
+	printf("%d\n", longint);
+
+
+
 }
+
+
