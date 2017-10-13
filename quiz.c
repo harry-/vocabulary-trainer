@@ -33,22 +33,25 @@ main (int argc, char *argv[])
     {
       	static struct option long_options[] =
         {
-          /* These options set a flag. */
-          {"verbose", no_argument,       &verbose_flag, 1},
-          {"brief",   no_argument,       &verbose_flag, 0},
-          /* These options don’t set a flag.
+        	/* These options set a flag. */
+          	{"verbose", no_argument,       &verbose_flag, 1},
+          	/* These options don’t set a flag.
              We distinguish them by their indices. */
-          {"add",     no_argument,       0, 'a'},
-          {"append",  no_argument,       0, 'b'},
-          {"delete",  required_argument, 0, 'd'},
-          {"questions",  required_argument, 0, 'q'},
-          {"file",    required_argument, 0, 'f'},
-          {0, 0, 0, 0}
+          	{"questions",  required_argument, 0, 'q'},
+          	{"data",    required_argument, 0, 'd'},
+          	{0, 0, 0, 0}
         };
-    /* getopt_long stores the option index here. */
-    int option_index = 0;
 
-      c = getopt_long (argc, argv, "abc:d:f:",
+		if (verbose_flag != 1)
+		{
+			freopen("/dev/null", "w", stderr);
+		}
+
+
+	    /* getopt_long stores the option index here. */
+    	int option_index = 0;
+
+      	c = getopt_long (argc, argv, "abc:d:f:",
                        long_options, &option_index);
 
       /* Detect the end of the options. */
@@ -61,31 +64,19 @@ main (int argc, char *argv[])
           /* If this option set a flag, do nothing else now. */
           if (long_options[option_index].flag != 0)
             break;
-          printf ("option %s", long_options[option_index].name);
+          fprintf (stderr, "option %s", long_options[option_index].name);
           if (optarg)
-            printf (" with arg %s", optarg);
+            fprintf (stderr, " with arg %s", optarg);
           printf ("\n");
           break;
 
-        case 'a':
-          puts ("option -a\n");
-          break;
-
-        case 'b':
-          puts ("option -b\n");
-          break;
-
-        case 'c':
-          printf ("option -c with value `%s'\n", optarg);
-          break;
-
         case 'q':
-          printf ("option -d with value `%s'\n", optarg);
+          fprintf (stderr, "option -d with value `%s'\n", optarg);
           questions = atoi(optarg);
           break;
 
-        case 'f':
-          printf ("option -f with value `%s'\n", optarg);
+        case 'd':
+          fprintf (stderr, "option -f with value `%s'\n", optarg);
           break;
 
         case '?':
@@ -98,10 +89,7 @@ main (int argc, char *argv[])
     }
 	//const char *dictionary = "italienisch";
 
-	if (verbose_flag != 1)
-	{
-		freopen("/dev/null", "w", stderr);
-	}
+
 	
 	
 
