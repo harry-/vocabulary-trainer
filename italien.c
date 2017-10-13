@@ -3,8 +3,12 @@
 #include <stdlib.h>
 #include <ctime>
 #include <string.h>
+#include <getopt.h>		
 
 #define dictionary "italienisch"
+
+/* Flag set by ‘--verbose’. */
+static int verbose_flag;
 
 
 int linecount(const char filename[]);
@@ -21,19 +25,89 @@ main (int argc, char *argv[])
 	int correct = 0; // keeping score of the current session
 	int wrong = 0;
 
+	int questions = 5;
+
+	int c;
+
+  	while (1)
+    {
+      	static struct option long_options[] =
+        {
+          /* These options set a flag. */
+          {"verbose", no_argument,       &verbose_flag, 1},
+          {"brief",   no_argument,       &verbose_flag, 0},
+          /* These options don’t set a flag.
+             We distinguish them by their indices. */
+          {"add",     no_argument,       0, 'a'},
+          {"append",  no_argument,       0, 'b'},
+          {"delete",  required_argument, 0, 'd'},
+          {"questions",  required_argument, 0, 'q'},
+          {"file",    required_argument, 0, 'f'},
+          {0, 0, 0, 0}
+        };
+    /* getopt_long stores the option index here. */
+    int option_index = 0;
+
+      c = getopt_long (argc, argv, "abc:d:f:",
+                       long_options, &option_index);
+
+      /* Detect the end of the options. */
+      if (c == -1)
+        break;
+
+      switch (c)
+        {
+        case 0:
+          /* If this option set a flag, do nothing else now. */
+          if (long_options[option_index].flag != 0)
+            break;
+          printf ("option %s", long_options[option_index].name);
+          if (optarg)
+            printf (" with arg %s", optarg);
+          printf ("\n");
+          break;
+
+        case 'a':
+          puts ("option -a\n");
+          break;
+
+        case 'b':
+          puts ("option -b\n");
+          break;
+
+        case 'c':
+          printf ("option -c with value `%s'\n", optarg);
+          break;
+
+        case 'q':
+          printf ("option -d with value `%s'\n", optarg);
+          questions = atoi(optarg);
+          break;
+
+        case 'f':
+          printf ("option -f with value `%s'\n", optarg);
+          break;
+
+        case '?':
+          /* getopt_long already printed an error message. */
+          break;
+
+        default:
+          abort ();
+        }
+    }
 	//const char *dictionary = "italienisch";
 
-	if (argc != 3)
+	if (verbose_flag != 1)
 	{
 		freopen("/dev/null", "w", stderr);
 	}
 	
-	int questions = 5;
-	if (argc == 2)
-	{
-		fprintf(stderr, "program started with argument %s\n", argv[1]);
-		questions = atoi(argv[1]);
-	}
+	
+
+
+		
+	
 
 	char * line = NULL;
 	size_t len = 0;
