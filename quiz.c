@@ -87,15 +87,6 @@ main (int argc, char *argv[])
           abort ();
         }
     }
-	//const char *dictionary = "italienisch";
-
-
-	
-	
-
-
-		
-	
 
 	char * line = NULL;
 	size_t len = 0;
