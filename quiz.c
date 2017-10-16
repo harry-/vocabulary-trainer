@@ -5,11 +5,13 @@
 #include <string.h>
 #include <getopt.h>		
 
-#define dictionary "italienisch"
+//#define dictionary_filename "italienisch"
 
 /* Flag set by ‘--verbose’. */
 static int verbose_flag;
 
+static char *dictionary_filename = "italienisch";
+static char *score_filename = "italienisch.score";
 
 int linecount(const char filename[]);
 int split(char string[], char right[]);
@@ -71,12 +73,15 @@ main (int argc, char *argv[])
           break;
 
         case 'q':
-          fprintf (stderr, "option -d with value `%s'\n", optarg);
+          fprintf (stderr, "option -q with value `%s'\n", optarg);
           questions = atoi(optarg);
           break;
 
         case 'd':
-          fprintf (stderr, "option -f with value `%s'\n", optarg);
+          fprintf (stderr, "option -d with value `%s'\n", optarg);
+          dictionary_filename = optarg;
+          score_filename = optarg;
+          strcat(score_filename, ".score");
           break;
 
         case '?':
@@ -94,7 +99,7 @@ main (int argc, char *argv[])
 
 	FILE *fp;
 
-	FILE *score = fopen("score", "ab+");
+	FILE *score = fopen(score_filename, "ab+");
 
 	if (score == NULL)
 	{
@@ -103,7 +108,7 @@ main (int argc, char *argv[])
 	}
 
 	int lines;
-	lines = linecount(dictionary);
+	lines = linecount(dictionary_filename);
 
 	int scoresheet[lines+1][2] = {0};
 
@@ -130,12 +135,12 @@ main (int argc, char *argv[])
 		int r = rand() % probability;  // choose a random line (weight)
 		fprintf(stderr, "random number (out of %d): %d\n", probability,r);
 
-		fp = fopen(dictionary, "r");	
+		fp = fopen(dictionary_filename, "r");	
 
 	    // Check if file exists
 	    if (fp == NULL)
 	    {
-	        printf("Could not open file %s", dictionary);
+	        printf("Could not open file %s", dictionary_filename);
 	        return -1;
 	    }
 
