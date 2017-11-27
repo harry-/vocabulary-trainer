@@ -44,11 +44,6 @@ main (int argc, char *argv[])
           	{0, 0, 0, 0}
         };
 
-		if (verbose_flag != 1)
-		{
-			freopen("/dev/null", "w", stderr);
-		}
-
 
 	    /* getopt_long stores the option index here. */
     	int option_index = 0;
@@ -101,16 +96,31 @@ main (int argc, char *argv[])
 
 	FILE *score = fopen(score_filename, "ab+");
 
+	if (verbose_flag != 1)
+	{
+		freopen("/dev/null", "w", stderr);
+	}
+
 	if (score == NULL)
 	{
 	    printf("Could not open file %s", "score");
 	    return -1;
 	}
 
-	int lines;
-	lines = linecount(dictionary_filename);
 
+	int lines = linecount(dictionary_filename);
+
+	int scorelines = linecount(score_filename);
 	int scoresheet[lines+1][2] = {0};
+
+
+	if (scorelines<1)
+	{
+		scoresheet[0][0]=1;
+		scoresheet[0][1]=1;
+		scoresheet[1][0]=1;
+		scoresheet[1][1]=1;
+	}
 
 	int idx = 0;
 	while ((read = getline(&line, &len, score)) != -1) 
@@ -208,7 +218,7 @@ main (int argc, char *argv[])
 	// Close the files
     fclose(fp);
 
-    score = freopen("score", "w+", score);
+    score = freopen(score_filename, "w+", score);
     for (int i = 0; i < lines; ++i)
     {
     	fprintf(score, "%d;%d\n", scoresheet[i][0], scoresheet[i][1]);
@@ -309,6 +319,8 @@ int createProbabilityTable(int scoresheet[][2], int output[], int lines)
 	
 	}
 	fprintf(stderr, "total probability:%d\n", totalProbability );
+	if(totalProbability == 0)
+		totalProbability = 1;
 	return totalProbability;
 }
 
